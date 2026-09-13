@@ -47,9 +47,11 @@ Both are 12-inch, Megtron-7 dielectric, same length and material, differing only
 - **A wrong port mapping assumption was caught and corrected mid project** (applying the wrong file's formula to the Traditional channel produced a smooth, artificially low-resonance curve with no physical meaning, and was resolved by verifying against each file's own header).
 
 - **A significant causality violation was identified in the Traditional channel file** during transient simulation:
+
 ```
 "after causality enforcement, the maximum in-band error is 134.6%, detected in S2_4 at 14.3 GHz"
 ```
+
 An initial hypothesis was that Spectre's required causality correction might substantially alter the effective channel response, potentially explaining an unexpectedly open early eye result. **This hypothesis was tested and rejected** (See Section 5 and Section 8 (Pitfalls)).
 
 - **Attempted, abandoned:** a channel-derived zero frequency (fz) extraction via upper-envelope peak fitting and −3dB corner detection. Failed because even the *envelope* of the Traditional channel's ripple peaks does not follow a smooth, monotonic trend — the connector transition itself introduces broadband resonance, not just isolated notches. A rule-of-thumb (fz ≈ fNyquist / 2.8) was used instead.
@@ -60,7 +62,6 @@ An initial hypothesis was that Spectre's required causality correction might sub
 <p align="center">
   <em>Fig. 2.1 Attempted zero extraction via upper-envelope peak fitting on the Traditional channel's resonance profile.</em>
 </p>
-
 
 ---
 
@@ -96,13 +97,13 @@ Rather than hand square-law equations (which overestimate gm significantly for 4
 | Two-stage cascade (tuned for Orthogonal channel) | ~0 dB | **10.15 dB** | 6.25 GHz |
 
 <p align="center">
-  <img src="./Plots/Second%20Phase%20%28Double%20Stage%29/CTLE_Double_Stage_Gain_Trad.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
+  <img src="./Plots/Second%20Phase%20%28Double%20Stage%29/CTLE_Double_Stage_Gain_Trad.png" width="600" alt="Double Stage CTLE Gain Traditional">
 </p>
 <p align="center">
   <em>Fig. 5.1 Initial attempt, AC Differential Gain plotted for traditional backplane, and marked @ 6.25GHz.</em>
 </p>
 <p align="center">
-  <img src="./Plots/Second%20Phase%20%28Double%20Stage%29/CTLE_Double_Stage_Gain_Orth.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
+  <img src="./Plots/Second%20Phase%20%28Double%20Stage%29/CTLE_Double_Stage_Gain_Orth.png" width="600" alt="Double Stage CTLE Gain Orthogonal">
 </p>
 <p align="center">
   <em>Fig. 5.2 AC Differential Gain plotted for orthogonal backplane, and marked @ 6.25GHz.</em>
@@ -154,28 +155,28 @@ PRBS7 differential input, 80ps bit period, 15ps rise/fall (within the channel fi
   <em>Fig 6.4 Eye diagram for Orthogonal channel.</em>
 </p>
 
-On the smooth Orthogonal channel, the eye opens cleanl, and eye height flips from negative (statistically overlapping logic levels) to positive (clean separation).
+On the smooth Orthogonal channel, the eye opens cleanly, and eye height flips from negative (statistically overlapping logic levels) to positive (clean separation).
 
-On the resonant Traditional channel, gain and edge speed both measurably improve (amplitude nearly triples, rise time nearly halves), but **eye height gets worse, not better**, after equalization. The mechanism: a linear CTLE amplifies everything in its passband uniformly, including the reflection-driven ISI components, not just the wanted signal. Since the Traditional channel's closure is dominated by resonance rather than simple attenuation, adding gain amplifies the interference right along with the signal — producing a net negative outcome despite every individual AC metric (gain, bandwidth, edge speed) improving. This is a structural limitation of single-zero/pole linear equalization, not a tuning deficiency, and directly motivates the DFE addition described in Section 9.
+On the resonant Traditional channel, gain and edge speed both measurably improve (amplitude nearly triples, rise time nearly halves), but **eye height gets worse, not better**, after equalization. The mechanism: a linear CTLE amplifies everything in its passband uniformly, including the reflection-driven ISI components, not just the wanted signal. Since the Traditional channel's closure is dominated by resonance rather than simple attenuation, adding gain amplifies the interference right along with the signal, producing a net negative outcome despite every individual AC metric (gain, bandwidth, edge speed) improving. This is a structural limitation of single-zero/pole linear equalization, not a tuning deficiency, and directly motivates the DFE addition described in Section 9.
 
 ---
 
 ## 7. Tools & Methodology Notes
 
-- **Cadence Virtuoso / Spectre**, gpdk045-class 45nm PDK
+- **Cadence Virtuoso / Spectre**: gpdk045-class 45nm PDK
 - **gm/Id sizing methodology** instead of square-law hand equations
-- **ADE Parametric Analysis** for manual iterative tuning of Rd/Cd/Rl/CL against real simulated AC response
-- **Python (numpy/scipy)** for Touchstone S-parameter parsing, mixed-mode SDD21 conversion, and channel resonance quantification
+- **ADE Parametric Analysis**: for manual iterative tuning of Rd/Cd/Rl/CL against real simulated AC response
+- **Python (numpy/scipy in JupyterLab)**: Touchstone S-parameter parsing, mixed-mode SDD21 conversion, and channel resonance quantification
 
 ---
 
 ## 8. Known Limitations / Pitfalls Found and Corrected
 
-- **Stale simulator cache produced a false result.** Spectre caches `nport` impulse responses in `~/.cadence/mmsim/*.bin` and can silently reuse a stale cached response from a previously-simulated channel file, even with the correct file loaded and correct port wiring. This produced a falsely clean/open eye on the Traditional channel in one run. **Diagnosed by checking the simulation log for a "Reuse impulse responses from..." message**, and resolved by clearing the cache directory and forcing a fresh computation. The corrected result (Section 6) shows the Traditional channel's eye did not actually open — reconfirming, not contradicting, the original resonance-driven finding.
+- **Stale simulator cache produced a false result.** Spectre caches `nport` impulse responses in `~/.cadence/mmsim/*.bin` and can silently reuse a stale cached response from a previously-simulated channel file, even with the correct file loaded and correct port wiring. This produced a falsely clean/open eye on the Traditional channel in one run. **Diagnosed by checking the simulation log for a "Reuse impulse responses from..." message**, and resolved by clearing the cache directory and forcing a fresh computation.
 - **A causality-correction hypothesis was proposed and rejected.** Given the Traditional channel file's significant causality violation (134.6% in-band error), it was hypothesized that Spectre's required correction might substantially improve the effective channel response. The cache-corrected re-simulation directly disproved this — the properly simulated eye is closed, in fact more so than the CTLE's input.
 - **CL and fz remain placeholder/rule-of-thumb values**, not derived from a real downstream stage or a clean channel-derived extraction.
-- **No PVT corner analysis** performed in this scope.
-- **No physical layout** — schematic/simulation level only.
+- **No PVT corner analysis** performed in this scope, on hold for now.
+- **No physical layout** as of yet, schematic/simulation level only.
 
 ---
 
@@ -183,7 +184,7 @@ On the resonant Traditional channel, gain and edge speed both measurably improve
 
 Following Jain's own thesis conclusion (Ch.8) and the Aldacher RX-DFE reference project (github.com/muhammadaldacher/SERDES-Design-of-RX-Decision-Feedback-Equalizer, a closely-matched 1-tap DFE design for 12Gb/s NRZ against a 14-inch FR4 channel), a Decision Feedback Equalizer is being added specifically to address the Traditional channel's residual, resonance-driven ISI that the CTLE alone could not correct.
 
-**Scope decision:** Jain's own suggested full pipeline (Fig 8.2) places an FFE stage between the CTLE/driver amp and the DFE, with the DFE's tap coefficients set from whatever postcursors remain *after* the FFE has already reduced them. This project deliberately omits the FFE stage in this phase — meaning the DFE will need to cancel larger, more numerous postcursors on its own than it would in Jain's complete pipeline. This is a documented scope reduction, not an oversight; if postcursor extraction (below) shows the DFE alone is insufficient, an FFE stage is the natural follow-up, exactly as Jain's own pipeline anticipates.
+**Scope decision:** Jain's own suggested full pipeline (Fig 8.2) places an FFE stage between the CTLE/driver amp and the DFE, with the DFE's tap coefficients set from whatever postcursors remain *after* the FFE has already reduced them. This project deliberately omits the FFE stage in this phase, meaning the DFE will need to cancel larger, more numerous postcursors on its own than it would in Jain's complete pipeline. This is a documented scope reduction, not an oversight; if postcursor extraction (below) shows the DFE alone is insufficient, an FFE stage is the natural follow-up, exactly as Jain's own pipeline anticipates.
 
 **Immediate next steps:**
 1. Extract normalized postcursor values via a single-pulse response through the channel + CTLE (sampling at 80ps bit-period intervals from the main cursor), to determine required tap count from real data rather than assumption.
