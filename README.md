@@ -54,7 +54,7 @@ Both are 12-inch, Megtron-7 dielectric, same length and material, differing only
 
 An initial hypothesis was that Spectre's required causality correction might substantially alter the effective channel response, potentially explaining an unexpectedly open early eye result. **This hypothesis was tested and rejected** (See Section 5 and Section 8 (Pitfalls)).
 
-- **Attempted, abandoned:** a channel-derived zero frequency (fz) extraction via upper-envelope peak fitting and −3dB corner detection. Failed because even the *envelope* of the Traditional channel's ripple peaks does not follow a smooth, monotonic trend — the connector transition itself introduces broadband resonance, not just isolated notches. A rule-of-thumb (fz ≈ fNyquist / 2.8) was used instead.
+- **Attempted, abandoned:** a channel-derived zero frequency (fz) extraction via upper-envelope peak fitting and −3dB corner detection. Failed because even the *envelope* of the Traditional channel's ripple peaks does not follow a smooth, monotonic trend, rather, the connector transition itself introduces broadband resonance, not just isolated notches. A rule-of-thumb (fz ≈ fNyquist / 2.8) was used instead.
 
 <p align="center">
   <img src="./Plots/Channel%20Loss%20Graphs/Ripple_Peaks.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
@@ -67,7 +67,7 @@ An initial hypothesis was that Spectre's required causality correction might sub
 
 ## 3. Device Characterization (gm/Id methodology)
 
-Rather than hand square-law equations (which overestimate gm significantly for 45nm short-channel devices — confirmed empirically: assumed gm ≈ 5.33mS via `gm=2Id/Vov`, actual simulated gm ≈ 3.14mS at comparable current, a ~40% overestimate), transistor sizing used gm/Id-based design:
+Rather than hand square-law equations (which overestimate gm significantly for 45nm short-channel devices, confirmed empirically: assumed gm ≈ 5.33mS via `gm=2Id/Vov`, actual simulated gm ≈ 3.14mS at comparable current, a ~40% overestimate), transistor sizing used gm/Id-based design:
 
 | Parameter | Value |
 |---|---|
@@ -83,7 +83,7 @@ Rather than hand square-law equations (which overestimate gm significantly for 4
 - **Half-circuit → physical component scaling:** design equations use half-circuit values; the physical resistor/capacitor placed between the two source nodes must be **2×RD** and **0.5×CD** respectively (confirmed against Jain's own schematic figure).
 - **fp2 target correction:** an initial claim that fp2 needed to sit at 1.5–2× the *data rate* (18–25 GHz) was checked and found to contain both a math error and a units error. Jain's own working design uses fp2 ≈ 1.33× Nyquist. fp2 was set to 10 GHz (~1.6× Nyquist) as a middle ground.
 - **Missing CL bug:** an early schematic omitted the load capacitor (CL) entirely, causing fp2 to be governed only by parasitic Cgd/Cdb.
-- **Real vs. ideal gain gap:** hand-calculated ideal peak gain (gm·RL) consistently exceeded simulated results, attributed to finite transistor output resistance (ro ≈ 2.2kΩ) and body effect (gmb ≈ 604µS) — both confirmed via DC operating-point analysis.
+- **Real vs. ideal gain gap:** hand-calculated ideal peak gain (gm·RL) consistently exceeded simulated results, attributed to finite transistor output resistance (ro ≈ 2.2kΩ) and body effect (gmb ≈ 604µS), both confirmed via DC operating-point analysis.
 - **Single-stage gain ceiling:** resolved by cascading two identical stages (precedented directly in Agale's SJSU thesis).
 
 ---
@@ -115,7 +115,7 @@ Rather than hand square-law equations (which overestimate gm significantly for 4
 
 PRBS7 differential input, 80ps bit period, 15ps rise/fall (within the channel file's stated edge-rate limit), real channel loaded via a 4-port `nport` block with passivity/causality enforcement enabled.
 
-**These are the final, cache-verified results** (see Section 8, Pitfall #3 — an earlier run on the Traditional channel was invalidated by a stale simulator cache and has been superseded by the numbers below):
+**These are the final, cache-verified results** (see Section 8, Pitfall #3, an earlier run on the Traditional channel was invalidated by a stale simulator cache and has been superseded by the numbers below):
 
 | Metric | Orthogonal Pre-CTLE | Orthogonal Post-CTLE | Traditional Pre-CTLE | Traditional Post-CTLE |
 |---|---|---|---|---|
@@ -173,7 +173,7 @@ On the resonant Traditional channel, gain and edge speed both measurably improve
 ## 8. Known Limitations / Pitfalls Found and Corrected
 
 - **Stale simulator cache produced a false result.** Spectre caches `nport` impulse responses in `~/.cadence/mmsim/*.bin` and can silently reuse a stale cached response from a previously-simulated channel file, even with the correct file loaded and correct port wiring. This produced a falsely clean/open eye on the Traditional channel in one run. **Diagnosed by checking the simulation log for a "Reuse impulse responses from..." message**, and resolved by clearing the cache directory and forcing a fresh computation.
-- **A causality-correction hypothesis was proposed and rejected.** Given the Traditional channel file's significant causality violation (134.6% in-band error), it was hypothesized that Spectre's required correction might substantially improve the effective channel response. The cache-corrected re-simulation directly disproved this — the properly simulated eye is closed, in fact more so than the CTLE's input.
+- **A causality-correction hypothesis was proposed and rejected.** Given the Traditional channel file's significant causality violation (134.6% in-band error), it was hypothesized that Spectre's required correction might substantially improve the effective channel response. The cache-corrected re-simulation directly disproved this, the properly simulated eye is closed, in fact more so than the CTLE's input.
 - **CL and fz remain placeholder/rule-of-thumb values**, not derived from a real downstream stage or a clean channel-derived extraction.
 - **No PVT corner analysis** performed in this scope, on hold for now.
 - **No physical layout** as of yet, schematic/simulation level only.
