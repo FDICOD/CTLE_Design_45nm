@@ -55,7 +55,7 @@ An initial hypothesis was that Spectre's required causality correction might sub
 - **Attempted, abandoned:** a channel-derived zero frequency (fz) extraction via upper-envelope peak fitting and −3dB corner detection. Failed because even the *envelope* of the Traditional channel's ripple peaks does not follow a smooth, monotonic trend — the connector transition itself introduces broadband resonance, not just isolated notches. A rule-of-thumb (fz ≈ fNyquist / 2.8) was used instead.
 
 <p align="center">
-  <img src="/home/fadi/Fadi/College/Third Year/Projects/CTLE/Plots/Channel Loss Graphs/Ripple_Peaks.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
+  <img src="./Plots/Channel%20Loss%20Graphs/Ripple_Peaks.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
 </p>
 <p align="center">
   <em>Fig. Attempted zero extraction via upper-envelope peak fitting on the Traditional channel's resonance profile.</em>
