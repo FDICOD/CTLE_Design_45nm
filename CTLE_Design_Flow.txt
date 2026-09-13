@@ -1,0 +1,149 @@
+CTLE Design Steps:
+
+Bit Rate: 12.5Gb/s
+Nyquist Rate: 6.25GHz
+
+
+First step is to obtain an s-param file (Without .s4p file, you have no benchmark for the physical medium.)
+.s4p file → plot its loss at 6.25 GHz → that one number unlocks your DC gain/peaking gain/fz choices, which unlocks everything else.
+
+CAUTION (Updated for 15dB file):
+MODEL FREQUENCY RANGE: DC to 40 GHz in 10 MHz frequency steps
+MODEL EDGE RATE LIMITATION: 12.5 ps (Using conservative 0.5/Fmax rule of thumb)
+
+
+Imported file from IEEE 802.3: 
+
+Attempt 1:
+
+Orthogonal Backplane 12dB under "Channel Simulations for 112G Backplane Analysis" by Nathan Tracy & Arturo Pachon, under TE Connectivity
+
+.s4p file: DPO_4in_Meg7_THRU.s4p (4" trace, Megtron-7 PCB)
+
+
+PORT MAPPING SETTINGS:
+		(Gxy - Row G, Column xy of Tyco STRADA Whisper Backplane Connector)
+		
+ 		Port   1  ----->  TX+ Side   <-->  G11  <-->  RX+ Side  <-----  Port   2 [Port 1 and Port 2 are connected through physical trace labelled G11]
+ 		Port   3  ----->  TX- Side   <-->  G12  <-->  RX- Side  <-----  Port   4 [similar logic]	
+
+
+Do not simulate transient edge rates faster than the number listed above. 
+(Edge rates faster than this number contain significant spectral content at frequencies above the model's highest frequency.)
+
+
+From the .s4p plot:
+
+Loss at 6.25 GHz = -4.27 dB
+
+Problem: 4" trace quite short maybe, and "thru" means clean path. CTLE might be useless as the IL is very low.
+
+Attempt 2:
+
+
+
+Traditional Backplane 15dB under "Channel Simulations for 112G Backplane Analysis" by Nathan Tracy & Arturo Pachon, under TE Connectivity
+
+.s4p file: Std_BP12inch_Meg7_Thru_B56
+
+PORT MAPPING SETTINGS:
+		Port   1  ----->  TX Side   <-->   B6   <-->  RX Side  <-----  Port   3
+		Port   2  ----->  TX Side   <-->   B5   <-->  RX Side  <-----  Port   4
+		
+		TX: [1, 2] <--> RX: [3, 4]
+
+Updates:
+
+12" (2" DC + 8" BP + 2" DC)
+Connector: RA Backplane Connector
+
+Insertion Loss, SDD21 = (S31 - S32 - S41 + S42)/2 (How? learn this.)
+
+Obtained SDD21 Loss @6.25 GHz: -9.73 dB
+
+Ripple peaks found, Loss @6.25Ghz: -9.66 dB
+
+Parameters:
+Nyquist Rate (fN): 6.25 GHz
+Target Peaking Gain (Peaking dB) = +10.5 db to +11 dB (As Peaking linear is from 3.4 to 3.55)
+
+Finding Operating Point:
+
+3 things to watch out for:
+	Speed (ft) vs Power trade-off: High gm/Id saves current but places transistor in moderate inversion when Cgg > gm, reducing switching speed.
+	We need stronger inversion however, to get higher transit frequency.
+	
+	Vds = 0.5V, is just a starting point. Real difference is Vds = Vdd - IdRl - Vsource (Verify this after schematic is built) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	Peaking ratio calculation: Do not use 11 dB (Peaking linear = 3.55)
+	Correct Peaking ratio: Pratio = Peak Target - A(DC)target = 11 - 2 = 9 dB --> P linear = 2.82, not 3.55 (based off 11 dB)
+
+
+
+Note on channel envelope / fz extraction: A
+
+An attempt was made to extract a data-derived zero frequency (fz) by fitting the upper envelope of the ripple peaks and locating a −3 dB rolloff corner. This was inconclusive — the channel's loss envelope does not follow a smooth, monotonic rolloff even across just the peak values (e.g., −16.3 dB at 0.35 GHz vs. −8.6 dB at 1.35 GHz vs. −16.0 dB at 1.69 GHz), indicating the connector transition is dominated by broadband resonance/mismatch behavior rather than smooth skin-effect/dielectric loss in the low-to-mid frequency range. fz was therefore set using the standard rule-of-thumb instead.
+
+Recommendation: stop trying to derive fz numerically from this channel. It's not that your code or method was wrong — the underlying data genuinely doesn't support a clean single-pole fz extraction. Keep fz ≈ 2.2 GHz (your original rule-of-thumb), note in your write-up that this channel's resonance-dominated behavior made a data-derived fz impractical (a legitimate, honest finding), and let the transient eye diagram be your real validation once you build the schematic.
+
+Item						Value
+Chosen operating point				gm/Id ≈ 9 V⁻¹ (moderate-strong inversion, balances gain efficiency vs. bandwidth for a 6.25 GHz Nyquist target)
+
+Vgs at this point				700.3 mV
+Id/W (current density)				69.75 µA/µm
+gm (at swept W = 5 µm)				3.14 mS
+Peak Gain Target				9 dB (Originally 11dB but required gm and Id/branch (7.55mS and 839uA) was impractical. Trade-off is residual loss of -0.7 dB)
+DC Gain Target					2 dB (Chosen from 0 - 5 dB range)
+fp2 (Pole 2)					10 Ghz (Originally set @ 12.5Ghz, later pushed to around 1.6*Nq, reduces the relative gm/Id needed)
+fz (zero)					2.2 GHz (Rule of thumb used, fNq/2.8, data derived alternative didn't work.)
+Cl (Load cap)					27 fF ((Placeholder, would be designed if next stage taken)
+
+
+Derivation chain:
+
+ωp2 = 1/(RL·CL)
+Peak Gain ≈ gm·RL                          (once CD shorts RD at high frequency)
+DC Gain = gm·RL / (1 + gm·RD/2)
+ωz = 1/(RD·CD)
+ωp1 = (1 + gm·RD/2) / (RD·CD) = ωz·(1 + gm·RD/2)
+
+
+Step 1 — RL from fp2, CL: RL = 1/(2π × 10 GHz × 27 fF) ≈ 590 Ω
+
+Step 2 — gm from peak gain target: Peak_linear = 10^(9/20) ≈ 2.818 gm = Peak_linear / RL = 2.818 / 590 ≈ 4.78 mS
+
+Step 3 — Id from gm/Id operating point: Id = gm / 9 ≈ 531 µA per branch (Itail ≈ 1.06 mA total)
+
+Step 4 — W from current density: W = 531 µA / 69.75 µA/µm ≈ 7.6 µm
+
+Step 5 — swing check: Id·RL ≈ 313 mV single-ended (~626 mV differential)
+
+Step 6 — RD (design/half-circuit value) from DC gain target: DC_linear = 10^(2/20) ≈ 1.259 1.259 = 2.818 / (1 + gm·RD/2) → gm·RD ≈ 2.476 RD = 2.476 / 4.78 mS ≈ 518 Ω
+
+Step 7 — CD (design/half-circuit value) from fz: CD = 1/(2π × 2.2 GHz × 518 Ω) ≈ 140 fF
+
+Step 8 — fp1 (falls out, not directly chosen): fp1 = 2.2 GHz × 2.238 ≈ 4.92 GHz
+
+(Notably: fp1 ≈ 4.92 GHz lands below Nyquist, meaning the gain has finished ramping to its full peak before 6.25 GHz — the response delivers its full 9 dB right at Nyquist rather than mid-ramp.)
+
+
+
+NOTE {gm/Id and Id/W are properties of the bias point, independent of W. The 3.14 mS figure is specific to the arbitrary 5 µm sweep width and is scaled later to hit the actual target gm.}
+
+NOTE {VDS = 0.5 V was used for the sweep as a first-pass estimate. This should be re-verified against the actual VDS the transistor sees in the final schematic — approximately Vdd − Id·RL − Vsource — once Vdd is confirmed from the PDK.}
+
+Final Values
+
+Component				Design/Half-Circuit Value	Physical Value to Place in Schematic
+
+RL (load, each side, drain→Vdd)	590 Ω				590 Ω (placed directly, one per side)
+CL (load, each side, drain→Vdd)	27 fF				27 fF (placed directly, one per side)
+RD (degeneration)			518 Ω				2 × 518 ≈ 1036 Ω (single resistor between the two source nodes)
+CD (degeneration)			140 fF				0.5 × 140 ≈ 70 fF (single capacitor between the two source nodes)
+Transistor width (each)			—				≈7.6 µm
+Bias current (each branch)		—				≈531 µA (Itail ≈ 1.06 mA total)
+
+
+
+Simulate in ADE (DC + AC + Eye diagram), then iterate.
+

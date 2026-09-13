@@ -1,0 +1,54 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! MODELNAME: Std_BP_12inch_Meg7
+!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! COPYRIGHT 2019 TE CONNECTIVITY - ALL INTERNATIONAL RIGHTS RESERVED
+!!
+!! These models are covered by a licensing agreement that restricts their use and distribution.
+!! If you have questions about the restrictions,
+!! contact the appropriate organization within your company.
+!!
+!! These models represent TE Connectivity parts only.
+!! Due to internal design and materials, they should not be used for products manufactured
+!! by companies other than TE Connectivity.
+!!
+!! For more information:
+!!     Email modeling@te.com
+!!     Go to www.te.com/simulation
+!!     Call the Product Information Center at 800-522-6752 in the United States
+!!     Connect to Global Customer support at
+!!     www.te.com/usa-en/customer-support/connect-with-us.html
+!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! 
+!! 
+!! SYSTEM DESCRIPTION: Daughtercard-Footprint-Right Angle Connector-Footprint-Daughtercard
+!! PCB DESCRIPTION: DC: 133mil, Megtron7N, 6-6-6mil 2" traces BP: 230mil, Megtron7N, 6-6-6mil 8" 
+!! CONNECTOR DESCRIPTION: Next-Gen STRADA Whisper Traditional Backplane Connector
+!! MODEL DESCRIPTION: Tyco Electronics System 4-port S-parameter 
+!! MODEL STATUS: Developmental
+!! MODEL GEOMETRY: Channel Model
+!! MODEL FREQUENCY RANGE: DC to 40 GHz in 10 MHz frequency steps
+!! MODEL EDGE RATE LIMITATION: 12.5 ps (Using conservative 0.5/Fmax rule of thumb)
+!! 
+!! TIME-DOMAIN TRANSFORM CAUTIONS: 
+!! 1.) Do not simulate transient edge rates faster than the number listed above.  Edge rates faster than this number 
+!!     contain significant spectral content at frequencies above the model's highest frequency. 
+!! 2.) Even when simulating edge rates that are slower than the number listed above, be aware that the best time 
+!!     resolution possible with a direct iFFT is (1 / 2Fmax).  As a result, time resolution is typically not adequate 
+!!     for most time-domain simulations unless tricks such as windowing are used to minimize leakage and aliasing. 
+!! 3.) Because the model has a uniform frequency step, a direct iFFT will result in an impulse that that has a time 
+!!     length given by either (1 / Fstep) or (1 / 2Fstep), depending on the transform being used.  Care has been taken 
+!!     in selecting the frequency step to ensure a settled impulse response for the model.  Therefore, convolution with 
+!!     the model's impulse response should present no issues.  However, if directly concatenating s-parameter models 
+!!     in the frequency domain a user must either interpolate necessary interim frequencies or complete impulse response 
+!!     zero-padding.  Impulse response zero-padding is more difficult, but more accurate. 
+!! 
+!! PORT DEFINITIONS: 
+!! Port   1  ----->  TX Side	     RX Side  <-----  Port   3
+!! Port   2  ----->  TX Side	     RX Side  <-----  Port   4
+!! 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
