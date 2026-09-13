@@ -6,6 +6,15 @@ Methodology primarily follows Ankit Jain's MS thesis (*Equalization in Continuou
 
 **Status:** CTLE design complete and verified. DFE design in progress (see Section 9).
 
+
+<p align="center">
+  <img src="./Plots/Second%20Phase%20%28Double%20Stage%29/CTLE_Final_Schematic.png" width="600" alt="Double Stage Final Schematic">
+</p>
+<p align="center">
+  <em>Two-stage Continuous Time Linear Equalizer Schematic, a fascinating melting pot of electronics</em>
+</p>
+
+
 ---
 
 ## 1. Specifications
@@ -202,4 +211,4 @@ Following Jain's own thesis conclusion (Ch.8), a Decision Feedback Equalizer is 
 5. J. Baprawski, "SerDes System CTLE Basics," 2012.
 6. S. Palermo, ECEN720/689 SerDes Circuit Design course material, Texas A&M University.
 7. B. Razavi, "The Decision-Feedback Equalizer [A Circuit for All Seasons]," *IEEE Solid-State Circuits Magazine*, Fall 2017.
-8. M. Aldacher, "SERDES Design of RX Decision Feedback Equalizer,"
+8. M. Aldacher, "SERDES Design of RX Decision Feedback Equalizer"
