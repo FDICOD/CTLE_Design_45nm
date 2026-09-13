@@ -127,28 +127,28 @@ PRBS7 differential input, 80ps bit period, 15ps rise/fall (within the channel fi
 **Key finding:** the identical CTLE design, same tuning methodology, produces opposite outcomes on two channels with nearly identical raw loss (−10.15 vs. −9.73 dB) but wildly different resonance behavior (0.03 dB vs. 7.83 dB average ripple).
 
 <p align="center">
-  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Traditional%29/CTLE_Trad_Trans.png" width="600" alt="Traditional Backplane Transient Waveform">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Traditional%20Backplane%29/CTLE_Trad_Trans.png" width="600" alt="Traditional Backplane Transient Waveform">
 </p>
 <p align="center">
   <em>Fig 6.1 Transient waveform for Traditional channel.</em>
 </p>
 
 <p align="center">
-  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Traditional%29/Eye_Diagram_Trad.png" width="600" alt="Traditional Backplane Eye Diagram">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Traditional%20Backplane%29/Eye_Diagram_Trad.png" width="600" alt="Traditional Backplane Eye Diagram">
 </p>
 <p align="center">
   <em>Fig 6.2 Eye diagram for Traditional channel.</em>
 </p>
 
 <p align="center">
-  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Orthogonal%29/CTLE_Orth_Trans.png" width="600" alt="Orthogonal Backplane Transient Waveform">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Orthogonal%20Backplane%29/CTLE_Orth_Trans.png" width="600" alt="Orthogonal Backplane Transient Waveform">
 </p>
 <p align="center">
   <em>Fig 6.3 Transient waveform for Orthogonal channel.</em>
 </p>
 
 <p align="center">
-  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Orthogonal%29/Eye_Diagram_Orth.png" width="600" alt="Orthogonal Backplane Eye Diagram">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Orthogonal%20Backplane%29/Eye_Diagram_Orth.png" width="600" alt="Orthogonal Backplane Eye Diagram">
 </p>
 <p align="center">
   <em>Fig 6.4 Eye diagram for Orthogonal channel.</em>
