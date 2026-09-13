@@ -182,9 +182,9 @@ On the resonant Traditional channel, gain and edge speed both measurably improve
 
 ## 9. Current Phase: DFE Design (In Progress)
 
-Following Jain's own thesis conclusion (Ch.8) and the Aldacher RX-DFE reference project (github.com/muhammadaldacher/SERDES-Design-of-RX-Decision-Feedback-Equalizer, a closely-matched 1-tap DFE design for 12Gb/s NRZ against a 14-inch FR4 channel), a Decision Feedback Equalizer is being added specifically to address the Traditional channel's residual, resonance-driven ISI that the CTLE alone could not correct.
+Following Jain's own thesis conclusion (Ch.8), a Decision Feedback Equalizer is being added specifically to address the Traditional channel's residual, resonance-driven ISI that the CTLE alone could not correct.
 
-**Scope decision:** Jain's own suggested full pipeline (Fig 8.2) places an FFE stage between the CTLE/driver amp and the DFE, with the DFE's tap coefficients set from whatever postcursors remain *after* the FFE has already reduced them. This project deliberately omits the FFE stage in this phase, meaning the DFE will need to cancel larger, more numerous postcursors on its own than it would in Jain's complete pipeline. This is a documented scope reduction, not an oversight; if postcursor extraction (below) shows the DFE alone is insufficient, an FFE stage is the natural follow-up, exactly as Jain's own pipeline anticipates.
+**Scope decision:** Jain's own suggested full pipeline places an FFE stage between the CTLE/driver amp and the DFE, with the DFE's tap coefficients set from whatever postcursors remain *after* the FFE has already reduced them. This project deliberately omits the FFE stage in this phase, meaning the DFE will need to cancel larger, more numerous postcursors on its own than it would in Jain's complete pipeline. This is a documented scope reduction, not an oversight; if postcursor extraction shows the **DFE alone is insufficient, an FFE stage is the natural follow-up**, exactly as Jain's own pipeline anticipates.
 
 **Immediate next steps:**
 1. Extract normalized postcursor values via a single-pulse response through the channel + CTLE (sampling at 80ps bit-period intervals from the main cursor), to determine required tap count from real data rather than assumption.
@@ -202,4 +202,4 @@ Following Jain's own thesis conclusion (Ch.8) and the Aldacher RX-DFE reference 
 5. J. Baprawski, "SerDes System CTLE Basics," 2012.
 6. S. Palermo, ECEN720/689 SerDes Circuit Design course material, Texas A&M University.
 7. B. Razavi, "The Decision-Feedback Equalizer [A Circuit for All Seasons]," *IEEE Solid-State Circuits Magazine*, Fall 2017.
-8. M. Aldacher, "SERDES Design of RX Decision Feedback Equalizer," github.com/muhammadaldacher/SERDES-Design-of-RX-Decision-Feedback-Equalizer.
+8. M. Aldacher, "SERDES Design of RX Decision Feedback Equalizer,"
