@@ -58,7 +58,7 @@ An initial hypothesis was that Spectre's required causality correction might sub
   <img src="./Plots/Channel%20Loss%20Graphs/Ripple_Peaks.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
 </p>
 <p align="center">
-  <em>Fig. Attempted zero extraction via upper-envelope peak fitting on the Traditional channel's resonance profile.</em>
+  <em>Fig. 2.1 Attempted zero extraction via upper-envelope peak fitting on the Traditional channel's resonance profile.</em>
 </p>
 
 
@@ -94,6 +94,19 @@ Rather than hand square-law equations (which overestimate gm significantly for 4
 | Single stage (final tuned) | ~0 dB | 5.81 dB | 7.6 GHz |
 | Two-stage cascade (tuned for Traditional channel) | ~0 dB | **9.00 dB** | 6.25 GHz |
 | Two-stage cascade (tuned for Orthogonal channel) | ~0 dB | **10.15 dB** | 6.25 GHz |
+
+<p align="center">
+  <img src="./Plots/Second%20Phase%20%28Double%20Stage%29/CTLE_Double_Stage_Gain_Trad.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
+</p>
+<p align="center">
+  <em>Fig. 5.1 Initial attempt, AC Differential Gain plotted for traditional backplane, and marked @ 6.25GHz.</em>
+</p>
+<p align="center">
+  <img src="./Plots/Second%20Phase%20%28Double%20Stage%29/CTLE_Double_Stage_Gain_Orth.png" width="600" alt="Ripple Peaks Envelope Extraction Attempt">
+</p>
+<p align="center">
+  <em>Fig. 5.2 AC Differential Gain plotted for orthogonal backplane, and marked @ 6.25GHz.</em>
+</p>
 
 ---
 
