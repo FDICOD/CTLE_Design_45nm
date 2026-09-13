@@ -126,7 +126,35 @@ PRBS7 differential input, 80ps bit period, 15ps rise/fall (within the channel fi
 
 **Key finding:** the identical CTLE design, same tuning methodology, produces opposite outcomes on two channels with nearly identical raw loss (−10.15 vs. −9.73 dB) but wildly different resonance behavior (0.03 dB vs. 7.83 dB average ripple).
 
-On the smooth Orthogonal channel, the eye opens cleanly — eye height flips from negative (statistically overlapping logic levels) to positive (clean separation).
+<p align="center">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Traditional%29/CTLE_Trad_Trans.png" width="600" alt="Traditional Backplane Transient Waveform">
+</p>
+<p align="center">
+  <em>Fig 6.1 Transient waveform for Traditional channel.</em>
+</p>
+
+<p align="center">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Traditional%29/Eye_Diagram_Trad.png" width="600" alt="Traditional Backplane Eye Diagram">
+</p>
+<p align="center">
+  <em>Fig 6.2 Eye diagram for Traditional channel.</em>
+</p>
+
+<p align="center">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Orthogonal%29/CTLE_Orth_Trans.png" width="600" alt="Orthogonal Backplane Transient Waveform">
+</p>
+<p align="center">
+  <em>Fig 6.3 Transient waveform for Orthogonal channel.</em>
+</p>
+
+<p align="center">
+  <img src="./Plots/Eye%20Diagram%20Analysis%20%28Orthogonal%29/Eye_Diagram_Orth.png" width="600" alt="Orthogonal Backplane Eye Diagram">
+</p>
+<p align="center">
+  <em>Fig 6.4 Eye diagram for Orthogonal channel.</em>
+</p>
+
+On the smooth Orthogonal channel, the eye opens cleanl, and eye height flips from negative (statistically overlapping logic levels) to positive (clean separation).
 
 On the resonant Traditional channel, gain and edge speed both measurably improve (amplitude nearly triples, rise time nearly halves), but **eye height gets worse, not better**, after equalization. The mechanism: a linear CTLE amplifies everything in its passband uniformly, including the reflection-driven ISI components, not just the wanted signal. Since the Traditional channel's closure is dominated by resonance rather than simple attenuation, adding gain amplifies the interference right along with the signal — producing a net negative outcome despite every individual AC metric (gain, bandwidth, edge speed) improving. This is a structural limitation of single-zero/pole linear equalization, not a tuning deficiency, and directly motivates the DFE addition described in Section 9.
 
